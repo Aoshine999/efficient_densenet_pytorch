@@ -4,6 +4,11 @@ import time
 import torch
 from torchvision import datasets, transforms
 from models import DenseNet
+from torch.utils.data import DataLoader
+from torchvision.datasets import ImageFolder
+
+
+
 
 
 class AverageMeter(object):
@@ -246,8 +251,12 @@ def demo(data, save, depth=100, growth_rate=12, efficient=True, valid_size=5000,
     ])
 
     # Datasets
-    train_set = datasets.CIFAR10(data, train=True, transform=train_transforms, download=True)
-    test_set = datasets.CIFAR10(data, train=False, transform=test_transforms, download=False)
+    # train_set = datasets.CIFAR10(data, train=True, transform=train_transforms, download=True)
+    # test_set = datasets.CIFAR10(data, train=False, transform=test_transforms, download=False)
+
+    train_set = ImageFolder(data + '/train', transform=train_transforms)
+    test_set = ImageFolder(data + '/test', transform=test_transforms)
+    valid_set = ImageFolder(data + '/val', transform=test_transforms)
 
     if valid_size:
         valid_set = datasets.CIFAR10(data, train=True, transform=test_transforms)
@@ -264,7 +273,7 @@ def demo(data, save, depth=100, growth_rate=12, efficient=True, valid_size=5000,
         growth_rate=growth_rate,
         block_config=block_config,
         num_init_features=growth_rate*2,
-        num_classes=10,
+        num_classes=23,
         small_inputs=True,
         efficient=efficient,
     )
